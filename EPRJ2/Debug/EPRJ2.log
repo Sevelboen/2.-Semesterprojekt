@@ -1,0 +1,8 @@
+﻿  Konfiguration.cpp
+c:\users\tobia\onedrive - aarhus universitet\1. semester au ikt\oprg\visual studio\eprj2\eprj2\konfiguration.cpp(66): warning C4018: '<': signed/unsigned mismatch
+c:\users\tobia\onedrive - aarhus universitet\1. semester au ikt\oprg\visual studio\eprj2\eprj2\konfiguration.cpp(80): warning C4018: '<': signed/unsigned mismatch
+  EPRJ2.cpp
+  Generating Code...
+c:\users\tobia\onedrive - aarhus universitet\1. semester au ikt\oprg\visual studio\eprj2\eprj2\konfiguration.cpp(177): warning C4715: 'Konfiguration::Findes': not all control paths return a value
+  EPRJ2.vcxproj -> C:\Users\tobia\OneDrive - Aarhus universitet\1. Semester AU IKT\OPRG\Visual Studio\EPRJ2\Debug\EPRJ2.exe
+  EPRJ2.vcxproj -> C:\Users\tobia\OneDrive - Aarhus universitet\1. Semester AU IKT\OPRG\Visual Studio\EPRJ2\Debug\EPRJ2.pdb (Full PDB)
