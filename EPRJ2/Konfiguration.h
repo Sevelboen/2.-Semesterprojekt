@@ -25,4 +25,3 @@ private:
 	string sysNavn_;
 	list<Enhed> enhedsListe_;
 };
-

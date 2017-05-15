@@ -22,4 +22,3 @@ private:
 	char type_;
 	int tidspunkt_[2];
 };
-

@@ -212,5 +212,3 @@ bool Konfiguration::Findes(int nr)
 
 	 return *this;
  }
-
-

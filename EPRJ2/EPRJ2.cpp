@@ -1,6 +1,9 @@
 #include "Konfiguration.h"
 
 void main() {
+
+	//Opsætning
+
 	string sys;
 	char c = 'j';
 
@@ -12,15 +15,17 @@ void main() {
 
 	string slettes;
 
-
+	//Start. Her skrives navne på systemet
 	cout << "Velkommen, indtast navn pa system" << endl;
 	cin >> sys;
 	
-
+	//Opret en konfiguration udfra det indtastede navn
 	Konfiguration konf(sys);
 	konf.Opdater();
 	system("pause");
 
+
+	//Hovedmenu hvorpå valg foretages. Opstillet som Switch-statement
 	while (c != 'q')
 	{
 		system("CLS");
@@ -29,6 +34,8 @@ void main() {
 		cin >> c;
 		switch (c)
 		{
+
+			//Opret ny Enhed
 		case 'o':
 		case 'O':
 			cout << "Enhedens adresse: " << endl;
@@ -46,6 +53,7 @@ void main() {
 			system("pause");
 			break;
 
+			//Slet en enhed
 		case's':
 		case'S':
 			cout << "Enhedens navn: " << endl;
@@ -55,6 +63,7 @@ void main() {
 			system("pause");
 			break;
 
+			//Gem alle oprettede enheder
 		case 'g':
 		case 'G':
 			konf.Gem();
@@ -62,6 +71,7 @@ void main() {
 			system("pause");
 			break;
 
+			//Afvikl en enhed manuelt
 		case 'a':
 		case 'A':
 			char nummer;
@@ -70,8 +80,11 @@ void main() {
 			char jn;
 			int nnr;
 
+			//Enheds ID
 			cout << "Skriv adressen på enheden du vil afvikle : " << endl;
 			cin >> nummer;
+
+			//Opret forbindelse til Arduino og sender ID som char...
 			cout << "Default port (3) og baud-rate? (9600) (j/n): " << endl;
 			cin >> jn;
 			if (jn == 'n') {
@@ -86,7 +99,7 @@ void main() {
 			}
 			nnr = nummer - '0';
 			
-
+			//...hvis enheden findes
 			if (konf.Findes(nnr) == true) {
 				konf.Afvikl(nummer, port, baud);
 				
@@ -98,13 +111,14 @@ void main() {
 				break;
 			}
 			
-
+			//Printer alle enheder ud
 		case 'p':
 		case 'P':
 			konf.PrintAlle();
 			system("pause");
 			break;
 
+			//Luk programmet
 		case 'q':
 		case 'Q':
 			cout << "Lukker ned..." << endl;
