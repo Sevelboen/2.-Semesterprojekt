@@ -1,5 +1,6 @@
 #include "Konfiguration.h"
 #include "Serial.h"
+#include <ctime>
 #include <Windows.h>
 
 
@@ -152,6 +153,27 @@ void Konfiguration::Afvikl( char enhnr, int port, int baud)
 
 }
 
+char Konfiguration::AutomatiskAfviking()
+{
+	time_t t = time(0);   // get time now
+	struct tm * now = localtime(&t);
+
+	int timer = now->tm_hour;
+	int minutter = now->tm_min;
+
+	list<Enhed>::const_iterator iter;
+	
+	for (iter = enhedsListe_.begin(); iter != enhedsListe_.end(); ++iter)
+	{
+		if (iter->FaaTimer() == timer && iter->FaaMinutter() == minutter ) {
+			Afvikl(iter->FaaAdresse(), 3, 9600);
+			return 'a';
+			
+		}
+	}
+
+}
+
 bool Konfiguration::Findes(int nr)
 {
 	list<Enhed>::const_iterator iter;
@@ -174,6 +196,28 @@ bool Konfiguration::Findes(int nr)
 		return false;
 	}
 
+}
+
+char Konfiguration::AntalTandte(int port, int baud)
+{
+	char l = 's';
+	char data[1];
+	CSerial* s = new CSerial();
+
+
+	if (!s->Open(port, baud))
+	{
+		cout << "Could not open COM" << port << endl;
+		system("pause");
+	}
+	data[0] = 'L';
+
+	Sleep(2000);
+	s->SendData(data, 1);
+	l = s->ReadDataWaiting();
+	s->Close();
+	delete s;
+	return l;
 }
 
  const Konfiguration & Konfiguration::operator+=( const Enhed & nyEnhed)

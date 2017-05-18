@@ -1,8 +1,13 @@
 #include "Konfiguration.h"
+#include <conio.h>
+#include <ctime>
 
 void main() {
 
 	//Opsætning
+
+	time_t t = time(0);   // get time now
+	struct tm * now = localtime(&t);
 
 	string sys;
 	char c = 'j';
@@ -12,6 +17,7 @@ void main() {
 	char enht;
 	int enhhr;
 	int enhm;
+	int tjek;
 
 	string slettes;
 
@@ -30,7 +36,17 @@ void main() {
 	{
 		system("CLS");
 		cout << sys << "\n\n" << endl;
-		cout << "O for at oprette ny enhed:\nS for at slette en enhed:\nG for at gemme enhederne:\nA for at afvikle en enhed manuelt:\nP for at printe:\n" << endl;
+		cout << "O for at oprette ny enhed:\nS for at slette en enhed:\nG for at gemme enhederne:\nA for at afvikle en enhed manuelt:\nT list alle enheder der er tændte:\nP for at printe:\n" << endl;
+		while (!kbhit()) {
+			time_t t = time(0);
+			struct tm * now = localtime(&t);
+			if (now->tm_sec == 0) {
+				if (konf.AutomatiskAfviking() == 'a') {
+					cout << "En enhed bliver afviklet" << endl;
+				}
+				
+			}
+		}
 		cin >> c;
 		switch (c)
 		{
@@ -109,7 +125,14 @@ void main() {
 				cout << "Enheden findes ikke!" << endl;
 				system("pause");
 				break;
-			}
+			}	
+
+
+		case 't':
+		case 'T':
+			cout << konf.AntalTandte(3, 9600);
+			system("pause");
+			break;
 			
 			//Printer alle enheder ud
 		case 'p':
@@ -122,10 +145,12 @@ void main() {
 		case 'q':
 		case 'Q':
 			cout << "Lukker ned..." << endl;
+			system("pause");
 			break;
 
 		default:
 			cout << "Ikke en mulighed" << endl;
+			system("pause");
 			break;
 		}
 	}
