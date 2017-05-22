@@ -1,15 +1,21 @@
 #include "Konfiguration.h"
 #include <conio.h>
 #include <ctime>
+#include <thread>
 
-void main() {
+
+bool slut = false;
+
+void Menu() {
 
 	//Opsætning
 
-	time_t t = time(0);   // get time now
+	time_t t = time(0);
 	struct tm * now = localtime(&t);
 
 	string sys;
+	int Baud;
+	int CPort;
 	char c = 'j';
 
 	int enha;
@@ -24,29 +30,26 @@ void main() {
 	//Start. Her skrives navne på systemet
 	cout << "Velkommen, indtast navn pa system" << endl;
 	cin >> sys;
+	cout << "Indtast COM-port på master" << endl;
+	cin >> CPort;
+	cout << "Indtast Baud-rate på master" << endl;
+	cin >> Baud;
 	
 	//Opret en konfiguration udfra det indtastede navn
-	Konfiguration konf(sys);
+	Konfiguration konf(sys, CPort, Baud);
 	konf.Opdater();
 	system("pause");
 
 
-	//Hovedmenu hvorpå valg foretages. Opstillet som Switch-statement
+	//Hovedmenu hvorpå valg foretages. Opstillet som Switch-statement. Q/q lukker programmet
 	while (c != 'q')
 	{
 		system("CLS");
 		cout << sys << "\n\n" << endl;
 		cout << "O for at oprette ny enhed:\nS for at slette en enhed:\nG for at gemme enhederne:\nA for at afvikle en enhed manuelt:\nT list alle enheder der er tændte:\nP for at printe:\n" << endl;
-		while (!kbhit()) {
-			time_t t = time(0);
-			struct tm * now = localtime(&t);
-			if (now->tm_sec == 0) {
-				if (konf.AutomatiskAfviking() == 'a') {
-					cout << "En enhed bliver afviklet" << endl;
-				}
-				
-			}
-		}
+
+
+
 		cin >> c;
 		switch (c)
 		{
@@ -91,33 +94,18 @@ void main() {
 		case 'a':
 		case 'A':
 			char nummer;
-			int port;
-			int baud;
-			char jn;
 			int nnr;
 
 			//Enheds ID
 			cout << "Skriv adressen på enheden du vil afvikle : " << endl;
 			cin >> nummer;
 
-			//Opret forbindelse til Arduino og sender ID som char...
-			cout << "Default port (3) og baud-rate? (9600) (j/n): " << endl;
-			cin >> jn;
-			if (jn == 'n') {
-				cout << "Skriv porten der kommunikerer med Master : " << endl;
-				cin >> port;
-				cout << "Skriv baud-raten : " << endl;
-				cin >> baud;
-			}
-			else if (jn == 'j') {
-				port = 3;
-				baud = 9600;
-			}
+			//Opret forbindelse til Arduino og sender ID som char hvis enheden findes
 			nnr = nummer - '0';
 			
-			//...hvis enheden findes
+
 			if (konf.Findes(nnr) == true) {
-				konf.Afvikl(nummer, port, baud);
+				konf.Afvikl(nummer);
 				
 				break;
 			}
@@ -127,10 +115,10 @@ void main() {
 				break;
 			}	
 
-
+			//Skriver antal tændte enheder
 		case 't':
 		case 'T':
-			cout << konf.AntalTandte(3, 9600);
+			cout << konf.AntalTandte();
 			system("pause");
 			break;
 			
@@ -145,9 +133,11 @@ void main() {
 		case 'q':
 		case 'Q':
 			cout << "Lukker ned..." << endl;
+			slut = true;
 			system("pause");
 			break;
 
+			//Hvis ikke valget findes
 		default:
 			cout << "Ikke en mulighed" << endl;
 			system("pause");
@@ -156,4 +146,32 @@ void main() {
 	}
 	
 	
+}
+
+
+void Auto() {
+	Konfiguration konf("s", 3, 9600);
+	konf.Opdater();
+
+	time_t t = time(0);
+	struct tm * now = localtime(&t);
+	while (slut == false) {
+		if (now->tm_sec == 0) {
+			if (konf.AutomatiskAfviking() == 'a') {
+				cout << "En enhed bliver afviklet" << endl;
+			}
+		}
+	}
+	
+}
+
+
+//Her oprettes multithreading, der kører menuen parallelt med at enhederne bliver automatisk afviklet
+
+void main() {
+
+	thread menu(Menu);
+	thread autoAfvikling(Auto);
+	menu.join();
+	autoAfvikling.join();
 }

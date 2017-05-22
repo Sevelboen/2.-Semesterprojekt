@@ -5,9 +5,11 @@
 
 
 
-Konfiguration::Konfiguration(string sys)
+Konfiguration::Konfiguration(string sys, int Port, int Baud)
 {
 	sysNavn_ = sys; 
+	comPort_ = Port;
+	baudRate_ = Baud;
 }
 
 
@@ -131,15 +133,15 @@ void Konfiguration::Gem() const
 
 }
 
-void Konfiguration::Afvikl( char enhnr, int port, int baud)
+void Konfiguration::Afvikl( char enhnr)
 {
 	char data[1];
 	CSerial* s = new CSerial();
 
 
-	if (!s->Open(port, baud))
+	if (!s->Open(comPort_, baudRate_))
 	{
-		cout << "Could not open COM" << port << endl;
+		cout << "Could not open COM" << comPort_ << endl;
 		system("pause");
 		return;
 	}
@@ -166,7 +168,7 @@ char Konfiguration::AutomatiskAfviking()
 	for (iter = enhedsListe_.begin(); iter != enhedsListe_.end(); ++iter)
 	{
 		if (iter->FaaTimer() == timer && iter->FaaMinutter() == minutter ) {
-			Afvikl(iter->FaaAdresse(), 3, 9600);
+			Afvikl(iter->FaaAdresse());
 			return 'a';
 			
 		}
@@ -198,26 +200,28 @@ bool Konfiguration::Findes(int nr)
 
 }
 
-char Konfiguration::AntalTandte(int port, int baud)
+char Konfiguration::AntalTandte()
 {
-	char l = 's';
+	char input[1];
 	char data[1];
 	CSerial* s = new CSerial();
 
 
-	if (!s->Open(port, baud))
+	if (!s->Open(comPort_, baudRate_))
 	{
-		cout << "Could not open COM" << port << endl;
+		cout << "Could not open COM" << comPort_ << endl;
 		system("pause");
 	}
 	data[0] = 'L';
 
 	Sleep(2000);
 	s->SendData(data, 1);
-	l = s->ReadDataWaiting();
+	if (s->ReadDataWaiting() > 0) {
+		s->ReadData(input, 1);
+	}
 	s->Close();
 	delete s;
-	return l;
+	return input[0];
 }
 
  const Konfiguration & Konfiguration::operator+=( const Enhed & nyEnhed)
