@@ -10,6 +10,8 @@ void Menu() {
 
 	//Opsætning
 
+	slut = false;
+
 	time_t t = time(0);
 	struct tm * now = localtime(&t);
 
@@ -150,16 +152,25 @@ void Menu() {
 
 
 void Auto() {
-	Konfiguration konf("s", 3, 9600);
-	konf.Opdater();
+	slut = false;
 
-	time_t t = time(0);
-	struct tm * now = localtime(&t);
+	bool sendt = false;
+
+	Konfiguration konfa("s", 3, 9600);
+	konfa.Opdater();
+
+
 	while (slut == false) {
-		if (now->tm_sec == 0) {
-			if (konf.AutomatiskAfviking() == 'a') {
+		time_t t = time(0);
+		struct tm * now = localtime(&t);
+		if (now->tm_sec == 0 && sendt == false) {
+			sendt = true;
+			if (konfa.AutomatiskAfviking() == 'a') {
 				cout << "En enhed bliver afviklet" << endl;
 			}
+		}
+		if (now->tm_sec == 10) {
+			sendt = false;
 		}
 	}
 	
