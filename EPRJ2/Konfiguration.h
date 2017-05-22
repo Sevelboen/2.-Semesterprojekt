@@ -16,6 +16,8 @@ public:
 	~Konfiguration();
 	void PrintAlle() const;
 	void Opdater();
+	void AendrAdresse(int, int);
+	void AendrTid(int, int, int);
 	void Gem() const;
 	void Afvikl(char);
 	char AutomatiskAfviking();

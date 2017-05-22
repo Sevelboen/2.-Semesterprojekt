@@ -103,6 +103,34 @@ void Konfiguration::Opdater()
 
 }
 
+void Konfiguration::AendrAdresse(int adr, int nyAdr)
+{
+	list<Enhed>::iterator iter;
+
+	for (iter = enhedsListe_.begin(); iter != enhedsListe_.end(); ++iter)
+	{
+		if (iter->FaaAdresse() == adr) {
+			iter->AendrAdresse(nyAdr);
+
+		}
+	}
+
+}
+
+void Konfiguration::AendrTid(int adr, int tim, int min)
+{
+	list<Enhed>::iterator iter;
+
+	for (iter = enhedsListe_.begin(); iter != enhedsListe_.end(); ++iter)
+	{
+		if (iter->FaaAdresse() == adr) {
+			iter->AendrTid(tim, min);
+
+		}
+	}
+
+}
+
 void Konfiguration::Gem() const
 {
 	ofstream myfile;

@@ -48,7 +48,7 @@ void Menu() {
 	{
 		system("CLS");
 		cout << sys << "\n\n" << endl;
-		cout << "O for at oprette ny enhed:\nS for at slette en enhed:\nG for at gemme enhederne:\nA for at afvikle en enhed manuelt:\nT list alle enheder der er tændte:\nP for at printe:\n" << endl;
+		cout << "O for at oprette ny enhed:\nS for at slette en enhed:\nI for at ændre en enheds automatiske tidsinstillinger:\nD for at ændre en enheds adresse:\nG for at gemme enhederne:\nA for at afvikle en enhed manuelt:\nT list alle enheder der er tændte:\nP for at printe:\n" << endl;
 
 
 
@@ -83,6 +83,32 @@ void Menu() {
 			cout << "Enheden er slettet!" << endl;
 			system("pause");
 			break;
+
+			//Ændr tid
+		case 'i':
+		case 'I':
+			cout << "Hvilken enhed skal ændres?" << endl;
+			cin >> enha;
+			cout << "Enhedens nye automatiske tidsindstilling: \nTimer:" << endl;
+			cin >> enhhr;
+			cout << "Minutter:" << endl;
+			cin >> enhm;
+			konf.AendrTid(enha, enhhr, enhm);
+			system("pause");
+			break;
+
+			//Ændr adresse
+		case 'd':
+		case 'D':
+			int nyadr;
+			cout << "Hvilken enhed skal ændres?" << endl;
+			cin >> enha;
+			cout << "Enhedens nye adresse:" << endl;
+			cin >> nyadr;
+			konf.AendrAdresse(enha, nyadr);
+			system("pause");
+			break;
+
 
 			//Gem alle oprettede enheder
 		case 'g':
