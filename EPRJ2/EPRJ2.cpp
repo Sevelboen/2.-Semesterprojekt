@@ -2,6 +2,7 @@
 #include <conio.h>
 #include <ctime>
 #include <thread>
+#include <Windows.h>
 
 
 bool slut = false;
@@ -146,7 +147,7 @@ void Menu() {
 			//Skriver antal tændte enheder
 		case 't':
 		case 'T':
-			cout << konf.AntalTandte();
+			cout << "Antal enheder som er tændte: " << konf.AntalTandte() << endl;
 			system("pause");
 			break;
 			
@@ -190,10 +191,8 @@ void Auto() {
 		time_t t = time(0);
 		struct tm * now = localtime(&t);
 		if (now->tm_sec == 0 && sendt == false) {
+			konfa.AutomatiskAfviking();
 			sendt = true;
-			if (konfa.AutomatiskAfviking() == 'a') {
-				cout << "En enhed bliver afviklet" << endl;
-			}
 		}
 		if (now->tm_sec == 10) {
 			sendt = false;

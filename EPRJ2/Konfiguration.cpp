@@ -183,21 +183,25 @@ void Konfiguration::Afvikl( char enhnr)
 
 }
 
-char Konfiguration::AutomatiskAfviking()
+void Konfiguration::AutomatiskAfviking()
 {
-	time_t t = time(0);   // get time now
-	struct tm * now = localtime(&t);
-
-	int timer = now->tm_hour;
-	int minutter = now->tm_min;
+	
 
 	list<Enhed>::const_iterator iter;
 	
 	for (iter = enhedsListe_.begin(); iter != enhedsListe_.end(); ++iter)
 	{
+		time_t t = time(0);
+		struct tm * now = localtime(&t);
+
+		int timer = now->tm_hour;
+		int minutter = now->tm_min;
+
 		if (iter->FaaTimer() == timer && iter->FaaMinutter() == minutter ) {
-			Afvikl(iter->FaaAdresse());
-			return 'a';
+			char adresse = '0' + iter->FaaAdresse();
+			Afvikl(adresse);
+			Sleep(2000);
+			cout << "Enhed " << iter->FaaAdresse() << " : " << iter->FaaNavn() << " bliver afviklet..." << endl;
 			
 		}
 	}
@@ -246,6 +250,7 @@ char Konfiguration::AntalTandte()
 	s->SendData(data, 1);
 	if (s->ReadDataWaiting() > 0) {
 		s->ReadData(input, 1);
+		Sleep(2000);
 	}
 	s->Close();
 	delete s;

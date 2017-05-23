@@ -20,7 +20,7 @@ public:
 	void AendrTid(int, int, int);
 	void Gem() const;
 	void Afvikl(char);
-	char AutomatiskAfviking();
+	void AutomatiskAfviking();
 	bool Findes(int);
 	char AntalTandte();
 	const Konfiguration & operator+=(const Enhed &nyEnhed);
