@@ -307,6 +307,7 @@ char Konfiguration::AntalTandte()
 		 if (iter->FaaNavn() == sletEnhed)
 		 {
 			 iter = enhedsListe_.erase(iter);
+			 cout << "Enhed slettet" << endl;
 			 break;
 		 }
 	 }

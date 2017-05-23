@@ -1,15 +1,24 @@
+#define NOMINMAX
+
 #include "Konfiguration.h"
 #include <conio.h>
 #include <ctime>
 #include <thread>
 #include <Windows.h>
+#include <limits>
+
 
 //Global variabel slut
 bool slut = false;
 
+//Funktion der skal checke om et input er et integer
+void CheckInt(int * );
+
 void Menu() {
 
 	//Opsætning
+
+	setlocale(LC_ALL, "danish");
 
 	slut = false;
 
@@ -33,10 +42,12 @@ void Menu() {
 	cout << "Velkommen, indtast navn pa system" << endl;
 	cin >> sys;
 	cout << "Indtast COM-port på master" << endl;
-	cin >> CPort;
+	cin >> CPort;	
+	CheckInt(&CPort);
 	cout << "Indtast Baud-rate på master" << endl;
 	cin >> Baud;
-	
+	CheckInt(&Baud);
+
 	//Opret en konfiguration udfra det indtastede navn
 	Konfiguration konf(sys, CPort, Baud);
 	konf.Opdater();
@@ -61,14 +72,17 @@ void Menu() {
 		case 'O':
 			cout << "Enhedens adresse: " << endl;
 			cin >> enha;
+			CheckInt(&enha);
 			cout << "Enhedens navn: " << endl;
 			cin >> enhn;
 			cout << "Enhedens type: " << endl;
 			cin >> enht;
 			cout << "Enhedens automatiske tidsindstilling: \nTimer:" << endl;
 			cin >> enhhr;
+			CheckInt(&enhhr);
 			cout << "Minutter:" << endl;
 			cin >> enhm;
+			CheckInt(&enhm);
 			konf += Enhed(enha, enhn, enht, enhhr, enhm);
 			cout << "Enheden er gemt!" << endl;
 			system("pause");
@@ -80,7 +94,6 @@ void Menu() {
 			cout << "Enhedens navn: " << endl;
 			cin >> slettes;
 			konf -= (slettes);
-			cout << "Enheden er slettet!" << endl;
 			system("pause");
 			break;
 
@@ -89,10 +102,13 @@ void Menu() {
 		case 'I':
 			cout << "Hvilken enhed skal ændres?" << endl;
 			cin >> enha;
+			CheckInt(&enha);
 			cout << "Enhedens nye automatiske tidsindstilling: \nTimer:" << endl;
 			cin >> enhhr;
+			CheckInt(&enhhr);
 			cout << "Minutter:" << endl;
 			cin >> enhm;
+			CheckInt(&enhm);
 			konf.AendrTid(enha, enhhr, enhm);
 			system("pause");
 			break;
@@ -103,8 +119,10 @@ void Menu() {
 			int nyadr;
 			cout << "Hvilken enhed skal ændres?" << endl;
 			cin >> enha;
+			CheckInt(&enha);
 			cout << "Enhedens nye adresse:" << endl;
 			cin >> nyadr;
+			CheckInt(&nyadr);
 			konf.AendrAdresse(enha, nyadr);
 			system("pause");
 			break;
@@ -204,6 +222,17 @@ void Auto() {
 	
 }
 
+
+void CheckInt(int *i) {
+	//Validerer om cin modtager et integer
+	while (!cin) {
+		//Hvis ikke cin modtager et integer udskrives en fejlmeddelelse
+		cout << "Denne værdi skal være et tal.\nIndtast igen: ";
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cin >> *i;
+	}
+}
 
 //Her oprettes multithreading, der kører menuen parallelt med at enhederne bliver automatisk afviklet
 
