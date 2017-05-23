@@ -264,9 +264,9 @@ char Konfiguration::AntalTandte()
 
 	Sleep(2000);
 	s->SendData(data, 1);
+	Sleep(2000);
 	if (s->ReadDataWaiting() > 0) {
 		s->ReadData(input, 1);
-		Sleep(2000);
 	}
 	s->Close();
 	delete s;
