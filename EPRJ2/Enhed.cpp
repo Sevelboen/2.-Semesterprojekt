@@ -6,6 +6,7 @@
 
 Enhed::Enhed(int adr, string nvn, char typ, int hr, int min)
 {
+	//Enhedens constructor-funktion der sætter alle private parametre
 	adresse_ = adr;
 	navn_ = nvn;
 	type_ = typ;
@@ -20,6 +21,7 @@ Enhed::~Enhed()
 
 void Enhed::Print() const
 {
+	//Printer alle enhedens private parametre. Hvis enhedens type ikke er s for "Simpel" udskriver den "Kompleks"
 	string type;
 	if (type_ == 's' || type_ == 'S') {
 		type = "Simpel";

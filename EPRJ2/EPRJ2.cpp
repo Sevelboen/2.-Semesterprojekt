@@ -4,7 +4,7 @@
 #include <thread>
 #include <Windows.h>
 
-
+//Global variabel slut
 bool slut = false;
 
 void Menu() {
@@ -179,6 +179,7 @@ void Menu() {
 
 
 void Auto() {
+	//Opsætning
 	slut = false;
 
 	bool sendt = false;
@@ -187,13 +188,16 @@ void Auto() {
 	konfa.Opdater();
 
 
+	//Så længe den globale variabel er false... 
 	while (slut == false) {
+		//...Ses der efter om tiden skrifter minutter. Hvis dette er tilfældet kaldes AutomatiskAfvikling(), og flaget sendt bliver stillet
 		time_t t = time(0);
 		struct tm * now = localtime(&t);
 		if (now->tm_sec == 0 && sendt == false) {
 			konfa.AutomatiskAfviking();
 			sendt = true;
 		}
+		//Når sekundtallet på den nuværende tid rammer 10, nulstilles sendt-flaget
 		if (now->tm_sec == 10) {
 			sendt = false;
 		}

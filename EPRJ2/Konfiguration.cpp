@@ -7,6 +7,7 @@
 
 Konfiguration::Konfiguration(string sys, int Port, int Baud)
 {
+	//Enhedens constructor-funktion der sætter alle private parametre
 	sysNavn_ = sys; 
 	comPort_ = Port;
 	baudRate_ = Baud;
@@ -20,6 +21,7 @@ Konfiguration::~Konfiguration()
 
 void Konfiguration::PrintAlle() const
 {
+	//Går enhedsListe_ igennem, og kalder alle enhedernes Print() funktion
 	list<Enhed>::const_iterator iter;
 
 	for (iter = enhedsListe_.begin(); iter != enhedsListe_.end(); ++iter)
@@ -33,6 +35,7 @@ void Konfiguration::PrintAlle() const
 
 void Konfiguration::Opdater()
 {
+	//Opsætning af anvendte variabler
 	string str;
 	ifstream myfile;
 	string ej;
@@ -40,7 +43,7 @@ void Konfiguration::Opdater()
 	string *linie;
 
 
-	//
+	//Finder antal linjer i filen hvori alle enheder gemmes
 
 	myfile.open("example.txt");
 	while (getline(myfile, ej)) {
@@ -48,7 +51,7 @@ void Konfiguration::Opdater()
 	}
 	myfile.close();
 
-	//
+	//Opretter et nyt string-array, med en længde på antal linjer i vores enheds-fil, således at alle enheder opdateres
 
 	myfile.open("example.txt");
 	linie = new string[lnjr];
@@ -64,7 +67,7 @@ void Konfiguration::Opdater()
 
 
 
-	//
+	//Erstatter alle ";" med et mellemrum, således at vi kan splitte enhedens private variabler fra hinanden
 
 	for (int i = 0; i<str.length(); i++)
 	{
@@ -72,6 +75,7 @@ void Konfiguration::Opdater()
 			str[i] = ' ';
 	}
 
+	//Opretter en string vector som indeholder al information fra filen
 
 	vector<string> aray;
 	stringstream ss(str);
@@ -79,7 +83,7 @@ void Konfiguration::Opdater()
 	while (ss >> temp)
 		aray.push_back(temp);
 
-
+	//Oversætter alt fra filen til enheder. Første linje springes over da denne bare er en indikator: "ID:NAVN:TYPE:TID"
 	for (int s = 1; s < aray.size(); s ++)
 	{
 
@@ -105,6 +109,7 @@ void Konfiguration::Opdater()
 
 void Konfiguration::AendrAdresse(int adr, int nyAdr)
 {
+	//Ændrer adressen på en bestemt enhed fra adr til nyAdr
 	list<Enhed>::iterator iter;
 
 	for (iter = enhedsListe_.begin(); iter != enhedsListe_.end(); ++iter)
@@ -119,6 +124,7 @@ void Konfiguration::AendrAdresse(int adr, int nyAdr)
 
 void Konfiguration::AendrTid(int adr, int tim, int min)
 {
+	//Ændrer den automatiske tidsindstilling på en enhed udfra dens adr. Tidsindstillingerne ændres således at tidspunkt_[0] = tim og tidspunkt_[1] = min
 	list<Enhed>::iterator iter;
 
 	for (iter = enhedsListe_.begin(); iter != enhedsListe_.end(); ++iter)
@@ -133,6 +139,7 @@ void Konfiguration::AendrTid(int adr, int tim, int min)
 
 void Konfiguration::Gem() const
 {
+	//Opsætning af anvendte variabler
 	ofstream myfile;
 	list<Enhed>::const_iterator iter;
 
@@ -142,9 +149,11 @@ void Konfiguration::Gem() const
 	int mtimer;
 	int mminutter;
 
+	//Første linie af filen er indikatoren:  "ID:NAVN:TYPE:TID"
 	myfile.open("example.txt");
 	myfile << "ID:NAVN:TYPE:TID\n";
 
+	//Dernæst kommer en ny enheds adresse, nav, type, og tid i timer og minutter. Dette gentages for alle enheder i enhedsListe_
 	for (iter = enhedsListe_.begin(); iter != enhedsListe_.end(); ++iter)
 	{
 		madresse = iter->FaaAdresse();
@@ -163,10 +172,11 @@ void Konfiguration::Gem() const
 
 void Konfiguration::Afvikl( char enhnr)
 {
+	//Opsætning af anvendte variabler
 	char data[1];
 	CSerial* s = new CSerial();
 
-
+	//Åbner kommunikation til master udfra comPort_ og baudRate_
 	if (!s->Open(comPort_, baudRate_))
 	{
 		cout << "Could not open COM" << comPort_ << endl;
@@ -175,6 +185,7 @@ void Konfiguration::Afvikl( char enhnr)
 	}
 	data[0] = enhnr;
 	
+	//Sender enhnr til master og lukker forbindelsen
 	Sleep(2000);
 	s->SendData(data, 1);
 	s->Close();
@@ -186,7 +197,7 @@ void Konfiguration::Afvikl( char enhnr)
 void Konfiguration::AutomatiskAfviking()
 {
 	
-
+	//Løber enhedsListe_ igennem indtil den finder en hvis automatiske tidsindstilling er tilsvarende til det nuværende klokkeslæt*
 	list<Enhed>::const_iterator iter;
 	
 	for (iter = enhedsListe_.begin(); iter != enhedsListe_.end(); ++iter)
@@ -197,6 +208,7 @@ void Konfiguration::AutomatiskAfviking()
 		int timer = now->tm_hour;
 		int minutter = now->tm_min;
 
+		//*Hvis dette er tilfældet kalder den Afvikl()-funktionen med enhedens adresse som char som parameter
 		if (iter->FaaTimer() == timer && iter->FaaMinutter() == minutter ) {
 			char adresse = '0' + iter->FaaAdresse();
 			Afvikl(adresse);
@@ -210,6 +222,7 @@ void Konfiguration::AutomatiskAfviking()
 
 bool Konfiguration::Findes(int nr)
 {
+	//Løber enhedsListe_ igennem. Hvis den finder en enhed med en adresse_ som er lig nr returnes true, ellers returnes false
 	list<Enhed>::const_iterator iter;
 	int findes = 0;
 
@@ -234,16 +247,19 @@ bool Konfiguration::Findes(int nr)
 
 char Konfiguration::AntalTandte()
 {
+	//Opsætning af anvendte variabler
 	char input[1];
 	char data[1];
 	CSerial* s = new CSerial();
 
-
+	//Åbner en forbindelse til master udfra comPort_ og baudRate_
 	if (!s->Open(comPort_, baudRate_))
 	{
 		cout << "Could not open COM" << comPort_ << endl;
 		system("pause");
 	}
+
+	//Sender "L" og lytter derefter på seriel-porten og returner hvad der ligger der.
 	data[0] = 'L';
 
 	Sleep(2000);
@@ -259,9 +275,11 @@ char Konfiguration::AntalTandte()
 
  const Konfiguration & Konfiguration::operator+=( const Enhed & nyEnhed)
 {
+	//Opsætning af anvendte variabler
 	bool isInserted = false;
 	list<Enhed>::iterator iter;
 
+	//Indsætter en enhed ind, efter nummerorden efter adresse
 	for (iter = enhedsListe_.begin(); iter != enhedsListe_.end(); ++iter)
 	{
 		if (iter->FaaAdresse() > nyEnhed.FaaAdresse())
@@ -280,8 +298,10 @@ char Konfiguration::AntalTandte()
 
  const Konfiguration & Konfiguration::operator-=(const string sletEnhed)
  {
+	 //Opsætning af anvendt iterator
 	 list<Enhed>::iterator iter;
 
+	 //Hvis en enhed har navnet sletEnhed slettes denne enhed
 	 for (iter = enhedsListe_.begin(); iter != enhedsListe_.end(); ++iter)
 	 {
 		 if (iter->FaaNavn() == sletEnhed)
