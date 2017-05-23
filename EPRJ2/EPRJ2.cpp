@@ -40,7 +40,7 @@ void Menu() {
 
 	//Start. Her skrives navne på systemet
 	cout << "Velkommen, indtast navn pa system" << endl;
-	cin >> sys;
+	getline(cin, sys);
 	cout << "Indtast COM-port på master" << endl;
 	cin >> CPort;	
 	CheckInt(&CPort);
