@@ -26,7 +26,6 @@ void Menu() {
 	char enht;
 	int enhhr;
 	int enhm;
-	int tjek;
 
 	string slettes;
 

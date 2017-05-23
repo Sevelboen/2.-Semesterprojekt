@@ -1,14 +1,7 @@
-﻿  Konfiguration.cpp
-c:\users\tobia\onedrive - aarhus universitet\1. semester au ikt\oprg\visual studio\eprj2\2.-semesterprojekt\eprj2\konfiguration.cpp(206): warning C4996: 'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\time.h(505): note: see declaration of 'localtime'
-  Enhed.cpp
-  EPRJ2.cpp
+﻿  EPRJ2.cpp
 c:\users\tobia\onedrive - aarhus universitet\1. semester au ikt\oprg\visual studio\eprj2\2.-semesterprojekt\eprj2\eprj2.cpp(17): warning C4996: 'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\time.h(505): note: see declaration of 'localtime'
-c:\users\tobia\onedrive - aarhus universitet\1. semester au ikt\oprg\visual studio\eprj2\2.-semesterprojekt\eprj2\eprj2.cpp(29): warning C4101: 'tjek': unreferenced local variable
-c:\users\tobia\onedrive - aarhus universitet\1. semester au ikt\oprg\visual studio\eprj2\2.-semesterprojekt\eprj2\eprj2.cpp(195): warning C4996: 'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+c:\users\tobia\onedrive - aarhus universitet\1. semester au ikt\oprg\visual studio\eprj2\2.-semesterprojekt\eprj2\eprj2.cpp(194): warning C4996: 'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\time.h(505): note: see declaration of 'localtime'
-  Generating Code...
-c:\users\tobia\onedrive - aarhus universitet\1. semester au ikt\oprg\visual studio\eprj2\2.-semesterprojekt\eprj2\konfiguration.cpp(246): warning C4715: 'Konfiguration::Findes': not all control paths return a value
   EPRJ2.vcxproj -> C:\Users\tobia\OneDrive - Aarhus universitet\1. Semester AU IKT\OPRG\Visual Studio\EPRJ2\2.-Semesterprojekt\x64\Debug\EPRJ2.exe
   EPRJ2.vcxproj -> C:\Users\tobia\OneDrive - Aarhus universitet\1. Semester AU IKT\OPRG\Visual Studio\EPRJ2\2.-Semesterprojekt\x64\Debug\EPRJ2.pdb (Full PDB)
