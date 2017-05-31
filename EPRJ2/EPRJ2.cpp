@@ -12,22 +12,19 @@
 bool slut = false;
 
 //Funktion der skal checke om et input er et integer
-void CheckInt(int * );
+void CheckInt(int *);
 
-void Menu() {
+//Vores menu for programmet
+void Menu(Konfiguration konfig) {
 
 	//Opsætning
 
 	setlocale(LC_ALL, "danish");
 
-	slut = false;
 
 	time_t t = time(0);
 	struct tm * now = localtime(&t);
-
-	string sys;
-	int Baud;
-	int CPort;
+	
 	char c = 'j';
 
 	int enha;
@@ -38,38 +35,6 @@ void Menu() {
 
 	string slettes;
 
-	//Start. Her skrives navne på systemet
-	cout << R"(
-     # # # # # # # # # # # # # # # # # # # # # 
-     #                          ________     #
-     #                         | ______o|    #
-     #         _______________ ||__---_||    #
-     #        |  ___________  || ______ |    #
-     #        | |           | |||______||    #
-     #        | | #         | ||--------|    #
-     #        | |           | ||      O |    #
-     #        | |           | ||      | |    #
-     #        | '-----------' ||      | |    #
-     #        |_____________-_||      | |    #
-     #          __/_______\__  |::::::::|    #
-     #         ________________'-.__         #
-     #        /:::::::::':::'::\ .\\\---.    #
-     #       /::======::: .:.:::\ \\_)   \   #
-     #       `""""""""""""""""""`  '-----'   #
-     # # # # # # # # # # # # # # # # # # # # #
-        )";
-	cout << "Velkommen, indtast navn pa system" << endl;
-	getline(cin, sys);
-	cout << "Indtast COM-port på master" << endl;
-	cin >> CPort;	
-	CheckInt(&CPort);
-	cout << "Indtast Baud-rate på master" << endl;
-	cin >> Baud;
-	CheckInt(&Baud);
-
-	//Opret en konfiguration udfra det indtastede navn
-	Konfiguration konf(sys, CPort, Baud);
-	konf.Opdater();
 	system("pause");
 
 
@@ -77,7 +42,7 @@ void Menu() {
 	while (c != 'q')
 	{
 		system("CLS");
-		cout << sys << "\n\n" << endl;
+		cout << konfig.FaaNavn() << "\n\n" << endl;
 		cout << "O for at oprette ny enhed:\nS for at slette en enhed:\nI for at ændre en enheds automatiske tidsinstillinger:\nD for at ændre en enheds adresse:\nG for at gemme enhederne:\nA for at afvikle en enhed manuelt:\nT list alle enheder der er tændte:\nP for at printe:\n" << endl;
 
 
@@ -102,7 +67,7 @@ void Menu() {
 			cout << "Minutter:" << endl;
 			cin >> enhm;
 			CheckInt(&enhm);
-			konf += Enhed(enha, enhn, enht, enhhr, enhm);
+			konfig += Enhed(enha, enhn, enht, enhhr, enhm);
 			cout << "Enheden er gemt!" << endl;
 			system("pause");
 			break;
@@ -112,7 +77,7 @@ void Menu() {
 		case'S':
 			cout << "Enhedens navn: " << endl;
 			cin >> slettes;
-			konf -= (slettes);
+			konfig -= (slettes);
 			system("pause");
 			break;
 
@@ -128,7 +93,7 @@ void Menu() {
 			cout << "Minutter:" << endl;
 			cin >> enhm;
 			CheckInt(&enhm);
-			konf.AendrTid(enha, enhhr, enhm);
+			konfig.AendrTid(enha, enhhr, enhm);
 			system("pause");
 			break;
 
@@ -142,7 +107,7 @@ void Menu() {
 			cout << "Enhedens nye adresse:" << endl;
 			cin >> nyadr;
 			CheckInt(&nyadr);
-			konf.AendrAdresse(enha, nyadr);
+			konfig.AendrAdresse(enha, nyadr);
 			system("pause");
 			break;
 
@@ -150,7 +115,7 @@ void Menu() {
 			//Gem alle oprettede enheder
 		case 'g':
 		case 'G':
-			konf.Gem();
+			konfig.Gem();
 			cout << "Alle enheder blev gemt";
 			system("pause");
 			break;
@@ -169,12 +134,12 @@ void Menu() {
 			nnr = nummer - '0';
 			
 
-			if (konf.Findes(nnr) == true) {
-				konf.Afvikl(nummer);
+			if (konfig.Findes(nnr) == true) {
+				konfig.Afvikl(nummer);
 				
 				break;
 			}
-			else if (konf.Findes(nnr) == false) {
+			else if (konfig.Findes(nnr) == false) {
 				cout << "Enheden findes ikke!" << endl;
 				system("pause");
 				break;
@@ -183,14 +148,14 @@ void Menu() {
 			//Skriver antal tændte enheder
 		case 't':
 		case 'T':
-			cout << "Antal enheder som er tændte: " << konf.AntalTandte() << endl;
+			cout << "Antal enheder som er tændte: " << konfig.AntalTandte() << endl;
 			system("pause");
 			break;
 			
 			//Printer alle enheder ud
 		case 'p':
 		case 'P':
-			konf.PrintAlle();
+			konfig.PrintAlle();
 			system("pause");
 			break;
 
@@ -209,28 +174,22 @@ void Menu() {
 			break;
 		}
 	}
-	
-	
+	konfig.~Konfiguration();
 }
 
-
-void Auto() {
+//Afvikler en enhed hvis de automatiske instillinger matcher det nuværende tidspunkt
+void Auto(Konfiguration konfig) {
 	//Opsætning
-	slut = false;
 
 	bool sendt = false;
-
-	Konfiguration konfa("s", 3, 9600);
-	konfa.Opdater();
-
-
+	
 	//Så længe den globale variabel er false... 
 	while (slut == false) {
-		//...Ses der efter om tiden skrifter minutter. Hvis dette er tilfældet kaldes AutomatiskAfvikling(), og flaget sendt bliver stillet
+		//...ses der efter om tiden skrifter minutter. Hvis dette er tilfældet kaldes AutomatiskAfvikling(), og flaget sendt bliver stillet
 		time_t t = time(0);
 		struct tm * now = localtime(&t);
 		if (now->tm_sec == 0 && sendt == false) {
-			konfa.AutomatiskAfviking();
+			konfig.AutomatiskAfviking();
 			sendt = true;
 		}
 		//Når sekundtallet på den nuværende tid rammer 10, nulstilles sendt-flaget
@@ -238,14 +197,13 @@ void Auto() {
 			sendt = false;
 		}
 	}
-	
 }
 
-
+//Validerer om cin modtager et integer
 void CheckInt(int *i) {
-	//Validerer om cin modtager et integer
+
+	//Hvis ikke cin modtager et integer udskrives en fejlmeddelelse
 	while (!cin) {
-		//Hvis ikke cin modtager et integer udskrives en fejlmeddelelse
 		cout << "Denne værdi skal være et tal.\nIndtast igen: ";
 		cin.clear();
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -253,12 +211,48 @@ void CheckInt(int *i) {
 	}
 }
 
-//Her oprettes multithreading, der kører menuen parallelt med at enhederne bliver automatisk afviklet
-
 void main() {
 
-	thread menu(Menu);
-	thread autoAfvikling(Auto);
+	string sys;
+	int Baud;
+	int CPort;
+
+	//Start. Her skrives navne på systemet
+	cout << R"(
+     # # # # # # # # # # # # # # # # # # # # # 
+     #                          ________     #
+     #                         | ______o|    #
+     #         _______________ ||__---_||    #
+     #        |  ___________  || ______ |    #
+     #        | |           | |||______||    #
+     #        | | #         | ||--------|    #
+     #        | |           | ||      O |    #
+     #        | |           | ||      | |    #
+     #        | '-----------' ||      | |    #
+     #        |_____________-_||      | |    #
+     #          __/_______\__  |::::::::|    #
+     #         ________________'-.__         #
+     #        /:::::::::':::'::\ .\\\---.    #
+     #       /::======::: .:.:::\ \\_)   \   #
+     #       `""""""""""""""""""`  '-----'   #
+     # # # # # # # # # # # # # # # # # # # # #
+        )";
+	cout << "Velkommen, indtast navn pa system" << endl;
+	getline(cin, sys);
+	cout << "Indtast COM-port på master" << endl;
+	cin >> CPort;
+	CheckInt(&CPort);
+	cout << "Indtast Baud-rate på master" << endl;
+	cin >> Baud;
+	CheckInt(&Baud);
+
+	//Opretter en konfiguration og opdaterer den udfra systemfilen
+	Konfiguration konfig(sys, CPort, Baud);
+	konfig.Opdater();
+
+	//Her oprettes multithreading, der kører menuen parallelt med at enhederne bliver automatisk afviklet
+	thread menu(Menu, konfig);
+	thread autoAfvikling(Auto, konfig);
 	menu.join();
 	autoAfvikling.join();
 }

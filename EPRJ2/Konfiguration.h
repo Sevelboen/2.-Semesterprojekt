@@ -6,6 +6,7 @@
 #include <vector>
 #include <sstream>
 #include "Enhed.h"
+#include "Serial.h"
 
 using namespace std;
 
@@ -14,6 +15,7 @@ class Konfiguration
 public:
 	Konfiguration(string, int, int); //Konfiguration constructor-funktion
 	~Konfiguration(); //Konfiguration deconstructor-funktion
+	string FaaNavn();
 	void PrintAlle() const; //Printer alle enheder fra enhedsListe_
 	void Opdater(); //Opdaterer alle gemte enheder
 	void AendrAdresse(int, int); //Ændrer adresse på en bestemt enhed
@@ -30,5 +32,6 @@ private:
 	list<Enhed> enhedsListe_; //Liste af alle enheder i systemet
 	int comPort_; //Porten som master-enheden kører over
 	int baudRate_; //Baud-raten på master-enheden
+	CSerial* s = new CSerial();
 
 };

@@ -11,12 +11,19 @@ Konfiguration::Konfiguration(string sys, int Port, int Baud)
 	sysNavn_ = sys; 
 	comPort_ = Port;
 	baudRate_ = Baud;
+
 }
 
 
 Konfiguration::~Konfiguration()
 {
+	s->Close();
+	delete s;
+}
 
+string Konfiguration::FaaNavn()
+{
+	return sysNavn_;
 }
 
 void Konfiguration::PrintAlle() const
@@ -174,7 +181,6 @@ void Konfiguration::Afvikl( char enhnr)
 {
 	//Opsætning af anvendte variabler
 	char data[1];
-	CSerial* s = new CSerial();
 
 	//Åbner kommunikation til master udfra comPort_ og baudRate_
 	if (!s->Open(comPort_, baudRate_))
@@ -188,9 +194,6 @@ void Konfiguration::Afvikl( char enhnr)
 	//Sender enhnr til master og lukker forbindelsen
 	Sleep(2000);
 	s->SendData(data, 1);
-	s->Close();
-
-	delete s;
 
 }
 
@@ -213,7 +216,7 @@ void Konfiguration::AutomatiskAfviking()
 			char adresse = '0' + iter->FaaAdresse();
 			Afvikl(adresse);
 			Sleep(2000);
-			cout << "Enhed " << iter->FaaAdresse() << " : " << iter->FaaNavn() << " bliver afviklet..." << endl;
+			cout << "Enhed " << iter->FaaAdresse() << " : " << iter->FaaNavn() << " blev afviklet..." << endl;
 			
 		}
 	}
@@ -250,7 +253,6 @@ char Konfiguration::AntalTandte()
 	//Opsætning af anvendte variabler
 	char input[1];
 	char data[1];
-	CSerial* s = new CSerial();
 
 	//Åbner en forbindelse til master udfra comPort_ og baudRate_
 	if (!s->Open(comPort_, baudRate_))
@@ -268,8 +270,6 @@ char Konfiguration::AntalTandte()
 	if (s->ReadDataWaiting() > 0) {
 		s->ReadData(input, 1);
 	}
-	s->Close();
-	delete s;
 	return input[0];
 }
 
