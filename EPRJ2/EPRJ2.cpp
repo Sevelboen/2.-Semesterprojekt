@@ -43,7 +43,15 @@ void Menu(Konfiguration konfig) {
 	{
 		system("CLS");
 		cout << konfig.FaaNavn() << "\n\n" << endl;
-		cout << "O for at oprette ny enhed:\nS for at slette en enhed:\nI for at ændre en enheds automatiske tidsinstillinger:\nD for at ændre en enheds adresse:\nG for at gemme enhederne:\nA for at afvikle en enhed manuelt:\nT list alle enheder der er tændte:\nP for at printe:\n" << endl;
+		cout << R"(
+O for at oprette ny enhed:
+S for at slette en enhed:
+I for at ændre en enheds automatiske tidsinstillinger:
+D for at ændre en enheds adresse:
+G for at gemme enhederne:
+A for at afvikle en enhed manuelt:
+T list alle enheder der er tændte:
+P for at printe:)" << endl;
 
 
 
