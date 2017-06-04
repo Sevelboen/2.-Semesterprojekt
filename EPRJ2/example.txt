@@ -3,6 +3,6 @@ ID:NAVN:TYPE:TID
 ;2;Flamme;S;20;05
 ;3;TV;k;20;06
 ;4;TV;k;20;07
-;5;Kokkenlys;s;9;55
-;6;Keddel;S;9;53
+;5;Kokkenlys;S;9;55
+;6;Keddel;s;9;53
 ;7;TV-Kokken;k;9;55

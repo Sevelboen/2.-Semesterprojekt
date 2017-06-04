@@ -18,7 +18,7 @@ void CheckInt(int *);
 void Menu(Konfiguration konfig) {
 
 	//Opsætning
-
+	slut = false;
 	setlocale(LC_ALL, "danish");
 
 
@@ -188,7 +188,7 @@ P for at printe:)" << endl;
 //Afvikler en enhed hvis de automatiske instillinger matcher det nuværende tidspunkt
 void Auto(Konfiguration konfig) {
 	//Opsætning
-
+	slut = false;
 	bool sendt = false;
 	
 	//Så længe den globale variabel er false... 
